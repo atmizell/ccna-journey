@@ -1,0 +1,174 @@
+# Module 2: Basic Switch and End Device Configuration
+
+**Relevant JITL Video**: Day 4 - Intro to CLI
+
+- Useful Configuration Mnemonic
+    - THE BILLS - Acronym for basic device configuration
+        - T - Terminal Access: configure terminal or conf t
+        - H - Set Hostname: hostname (name)
+        - E - Enable Password (MD5 encrypt): enable secret (password)
+        - B - Banner message of the day: banner motd ###
+        - I - IP Domain Lookup: no ip domain-lookup (avoids trying to lookup a domain when typing nonsense; just states: invalid input detected)
+        - L - Secure Console Lines (user EXEC): line console 0 → password (#) → login → end
+        - L - Secure VTY Lines (virtual terminals): line vty 0 15 → password (#) → login → end
+        - S - Secure Plaintext Passwords in start/run-config (MD7, prevent shoulder surfing): service password-encryption
+    - Switch Configuration Note: set a logical address to allow remote access (Virtual LAN): interface vlan 1 → ip address (192.168.1.1) (255.255.255.0) → no shutdown or no shut
+- 2.1 Cisco IOS Access
+    - Operating System
+        - Hardware - underlying components, physical
+        - Kernel - Interact directly with the hardware, manages hardware resources
+        - Shell - Interface with applications and the user
+        - User can interact with the shell using the **command-line interface (CLI)** or a **Graphical User Interface (GUI)**
+            - CLI allows users to interact directly with the system in a text based environment, which requires very little overhead to operate but the user needs to know underlying command structure
+    - GUI
+        - Ex. Windows, macOS, Linux KDE, Apple iOS, Android
+        - Cisco = Cisco Internetwork Operating System (CIOS)
+        - OS on Home Routers is called **firmware** - often configured by using web browser-based GUI
+    - OS Purpose:
+        - GUI - mouse selections, view output, enter text and text-based commands
+        - CLI - keyboard for network programs and text-based commands, view output
+    - Access Methods
+        - Regardless of the default behavior of a new switch, all switches should be configured and secured
+        - **Console**: physical management port that provides out-of-band access to Cisco device.
+            - Out-of-Band access via a dedicated management channel used for device maintenance only
+            - Adv: device is accessible even if no network services are configured
+        - **Secure Shell (SSH)**: in-band, recommended method for remotely establising a secure CLI connection, through virtual interface, over a network.
+            - Requires active networking services
+        - **Telnet**: insecure, in-band remote CLI session method. *Unencrypted* connection, all commands sent over network in plaintext.
+    - Terminal Emulation Programs: Connect to network devices by serial connection or console port (PuTTY, Tera Term, SecureCRT)
+- 2.2 IOS Navigation
+    - Primary Command Modes
+        - User EXEC Mode (**>**): limited capabilities, basic operations (view only mode)
+        - **Privileged EXEC Mode** (**#**): execute configuration commands
+            - access with command: **enable**
+    - Configuration Mode (Subconfiguration Modes)
+        - User must enter global configuration mode to configure device, identified by **(config)#**
+        - Sub Config Modes:
+            - Line Config Mode (**config-line**): console, SSH, Telnet, or AUX access
+            - Interface Config Mode (**config-if**): switch port or router network interface
+    - Navigation:
+        - Previous Mode: exit, end, *Ctrl+Z*
+        - In/Out of Privileged Exec: enable / disable
+        - Global Configuration Mode: configure terminal (or conf t)
+        - Sub-config: line or interface
+            - line console 0
+            - line vty 0 15
+            - interface vlan 1
+- 2.3 The Command Structure
+    - **Syntax**: Prompt + Command + Space + Keyword(s) / Argument(s)
+        - ex: [Switch>] [show] [ ] [ip protocols]
+    - The **Cisco IOS Command Reference** is the ultimate source of information for a particular IOS command.
+    - **IOS Help Features**:
+        - Context-Sensitive Help (?):
+            - Which commands are available in each command mode?
+            - Which commands start with specific characters or group of characters?
+            - Which arguments and keywords are available to particular commands?
+        - Command Syntax Check: verifies that a valid command was entered by the user
+    - Hot Keys and Shortcuts
+        - Tab - completes a partial command name entry
+        - Ctrl+D - erases the character at the cursor
+        - Ctrl+K - erases all characters from the cursor to the end of the command line
+        - Esc+D - Erases all characters from the cursor to the end of the word
+        - Ctrl+U or Ctrl+X - erases all characters from the cursor back to the beginning of the command line
+        - Ctrl+W - erases the word to the left of the cursor
+        - Ctrl+A - moves the cursor to the beginning of the line
+        - Left Arrow or Ctrl+B - moves the cursor one character left
+        - Esc+B - moves the cursor back one word to the left
+        - Esc+F - moves the cursor forward one word to the right
+        - Right Arrow or Ctrl+F - moves the cursor one character right
+        - Ctrl+E - moves the cursor to the end of the command line
+        - Up Arrow or Ctrl+P - Recalls the previous command in the history buffer
+        - Down Arrow or Ctrl+N - go to the next line in the history buffer
+        - Ctrl+R or Ctrl+I or Ctrl+L - redisplay the system prompt and command line after a console message is received
+        - Responses to the “—More—” prompt
+            - Enter - display the next line
+            - Space - display the next screen
+            - Any other key ends the display screen, returning to the previous prompt
+        - Exit Keys:
+            - Ctrl+C - end conf mode, return to priv EXEC mode. In setup, aborts back to command prompt
+            - Ctrl+Z - end conf mode, return to Priv EXEC mode
+            - Ctrl+Shift+6 - All-purpose break sequence used to abort DNS lookups, traceroutes, pings, etc.
+- 2.4 Basic Device Configuration
+    - Device Names: start with letter, no spaces/special; only letters, digits, and dashes; <64 characters
+        - priv EXEC → configure terminal → hostname (name)
+        - Default: no hostname
+        - Always update documentation when devices added or modified. Identify devices by their location, purpose, and address.
+    - Password Guidelines
+        - All network devices should limit admin access by securing priv EXEC, user EXEC, and remote Telnet access with passwords. Also, all passwords should be encrypted and legal notifications provided.
+        - Strong passwords: >8 characters; upper/lower, numbers, special characters; not repeated; no common words
+    - Configure Passwords
+        - Secure User Exec Mode:
+            - secured from the line console configuration mode
+            - (config)# line console 0 → password (password) → login → end
+        - Secure Privileged EXEC: admin access to all IOS commands
+            - (config)# enable secret (password)
+            - Secret utilizes MD5 encryption, which is stronger than the base Type 7 encryption for “enable password”
+        - Secure Virtual Terminal (VTY) Lines: enable remote access using Telnet or SSH to the device (Cisco often supports 16 lines, numbered 0-15)
+            - (config)# line vty 0 15 → password (password) → login → end
+    - Encrypt Passwords
+        - startup and running config display passwords in plain text if unencrypted
+        - Encrypt all plaintext passwords (applies weak Type 7 encrypt): (config)# service password-encryption
+    - Banner Messages: declare authorized access only
+        - (config)# banner motd # Authorized Access Only #
+- 2.5 Save Configurations
+    - Configuration Files
+        - Device configuration is saved in:
+            - Startup-config: the saved config file in NVRAM; all commands used on startup or reboot
+            - Running-config: current configuration stored in Random Access Memory (RAM); impacts immediate operations, lost on reboot
+        - Show command: show running-config or show startup-config
+        - Copy (save the running config to startup config): copy running-config startup-config
+            - Alt commands: write or write memory
+    - Alter the Running Configuration
+        - reload - restore device to startup-config (downtime)
+        - erase startup-config - wipe the startup-config
+    - **Capture configuration** to a Text File
+        - Assume switch is configured and running-config is saved
+        - (1) Open terminal emulation software (PuTTY, Tera Term)
+        - (2) Enable logging (All Session Output) in the terminal software and assign a name and file location to save the log file.
+        - (3) Execute the show running-config or show startup-config commands at the priv EXEC prompt. Text displayed in the terminal will be saved.
+        - (4) Disable logging in the terminal software. Choose: None
+        - The created text file can be used as a record of how the device is currently implemented
+        - To restore a configuration file to a device: enter global configuration mode, copy and paste the text file into the terminal window connected to the switch
+- 2.6 Ports and Addresses
+    - Internet Protocol (IP) Addresses
+        - Primary means of end-to-end communication on the internet
+        - IPv4
+            - IPv4 Address (ex. 192.168.1.10): dotted decimal notation, represented by four decimal numbers b/w 0-255. Assigned to individual devices connected to a network.
+            - Subnet Mask (ex. 255.255.255.0): 32-bit balue that differentiates the network portion of the address from the host portion. Determines to which subnet the device is a member.
+            - Default Gateway (ex. 192.168.1.1): IP address of the router that the host will use to access remote networks
+        - IPv6
+            - IPv6 Address (ex. 2001:db8:acad:10::10): 128-bit length, string of hexadecimal values; every four bits is represented by a single hexadecimal digit (total of 32 hex values). Groups of four hex digits are separated by a colon (hextet); not case sensitive.
+    - Interfaces and Ports
+        - **Network Media Types**: twisted-pair copper cables, fiber-optic cables, coaxial cables, or wireless
+        - Differences: distance, environment, data amount/speed, cost of media and installation
+        - Links require specific technology:
+            - End devices: Ethernet and RJ45 ports are common for Local Area Networks (LAN)
+            - Cisco IOS Layer 2 switches have ports, which do not support Layer 3 IP Addresses.
+                - Switches have one or more **Switch Virtual Interfaces (SVIs)** - virtual interfaces created in software.
+                - SVIs allow for remote managing of switch over a network using IPv4 and IPv6.
+                - Default SVI is interface VLAN1. Note: A layer 2 Switch does not need an IP Address. The IP Address assigned to the SVI is used to remotely access the switch.
+- 2.7 Configure IP Addressing
+    - Manual IP Address Configuration for End Devices
+        - Manually Configure on Windows: Control Panel → Network Sharing Center → Change Adapter Settings → (Choose Adapter) → (right-click) → Properties (display Local Area Connection Properties) → (highlight IPv4) → Properties → Configure IPv4 Address, Subnet Mask, Default Gateway
+        - Note: The DNS Server addresses are the IPv4 and IPv6 addresses of the **Domain Name System (DNS)** servers, which are used to translate IP addresses to domain names
+    - Automatic IP Address Configuration for End Devices
+        - Automatic Configuration uses **Dynamic Host Configuration Protocol (DHCP)**
+        - Windows: Select “Obtain an IP Address Automatically” and “Obtain DNS server address automatically”
+        - Note: IPv6 uses **DHCPv6** and **SLAAC (Stateless Address Autoconfiguration)** for dynamic address allocation
+    - Display IP Configuration on Windows (CLI): ipconfig
+    - Switch Virtual Interface Configuration
+        - Configure an SVI:
+            - *Enter config*: S1(config)# interface vlan1
+            - *Configure IPv4 Address and subnet mask*: ip address 192.168.1.20 255.255.255.0
+            - E*nable the interface*: no shutdown
+            - *Set default gateway*: exit → ip default-gateway 192.168.1.1
+- 2.8 Verify Connectivity
+    - Validate proper ip configuration:
+        - Windows CLI: ipconfig
+        - Switch CLI: show ip interface brief
+    - Test the Interface Assignment
+    - Test end-to-end connectivity (ping)
+        - Always a good idea to test connectivity in both directions
+- 2.9 Module Practice and Quiz
+    - Basic Switch and End Device Configuration (Logical/Physical)
+    - Module Review
