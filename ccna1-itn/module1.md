@@ -1,0 +1,99 @@
+# **Module 1: Networking Today**
+
+**Relevant JITL Videos**: Day 1 - Network Devices
+
+- 1.2. **Network Components**
+    - **Host (Client)**: all computers that are connected to a network with an identification number (IP Address) and participate directly in network communication
+    - **Server**: Computers equipped with software that allows them to provide information (i.e., email, web page)
+    - **Peer-to-Peer**: a type of network where devices function as both clients and servers to share information
+        - Adv: Easy setup, less complex, low cost, simple tasks
+        - Dis: No admin, less secure, less scalable, may be slower
+    - **End Device**: either the source or destination of a message transmitted over a network
+    - **Intermediary Devices**: connect individual end devices to the network (i.g, router, switch, firewall)
+        - Functions: retrans signals, maintain pathway information, notify others of errors, utilize alternate paths when necessary, classify/direct messages according to priorities, permit/deny data flow
+    - **Network Media**: transmit communications across a network.
+        - Metal wires (copper) - electrical impulses
+        - Fiber Optic Cables - light pulses
+        - Wireless - data encoded via modulation of specific frequencies of EM waves
+    - **Network Media Criteria**:
+        - Max allowable transmit distance?
+        - Installation environment?
+        - Amount/speed of data?
+        - Cost of media and installation?
+- 1.3 Network Representations and Topologies
+    - Topology diagrams visually depict how networks are connected
+        - Physical - illustrate physical location of devices and cables
+        - Logical - illustrate devices, ports, and the addressing scheme
+    - Connection Terminology:
+        - Network Interface Card (NIC): physically connects an end device to a network
+        - Physical Port: connector/outlet on a networking device where media connects to an end device or alt networking device
+        - Interface: Specialized ports on networking device that connect to individual networks (router ports)
+- 1.4 Common Types of Networks
+    - Scale: Internet → Business/Large → Small office/Home office (SOHO) → Simple
+    - Types:
+        - **Local Area Netowork (LAN)**: limited geograpical area, administered by single organization/individual, provide high-speed bandwidth
+        - **Wide Area Network (WAN)**: wide area, administered by multiple service providers, slower speeds
+        - Internet: connects all WANs and LANs
+            - Managing Organizations: Internet Engineering Task Force (IETF), Internet Corporation for Assigned Names and Numbers (ICANN), Internet Architecture Board (IAB), etc.
+            - Intranet: private collection of LAN/WAN (i.e. company)
+            - Extranet: external access to intranet (suppliers, customers, collaborators)
+- 1.5 Internet Access Technologies
+    - Home and Small Office Internet Connection
+        - Cable - internet/cable signal on same cable; high bandwidth/availability (cable TV service providers)
+        - Digital Subscriber Line (DSL) - high bandwidth/availability, similar to cable, utilizes telephone lines (SOHO often uses Asymmetrical DSL - download > upload speed)
+        - Cellular - utilize phone companies and cell towers
+        - Satellite - utilize satellite dishes (require LOS)
+        - Dial-Up Telephone - inexpensive, uses phone line and modem, low bandwidth
+    - Business Internet Connections
+        - Dedicated Lease Lines - reserved circuits, rented
+        - Metro Ethernet - Ethernet WAN
+        - Business DSL - often Symmetrical (high up/download speeds)
+        - Satellite
+    - Converging Network - combines the previously separate data, telephone, and video networks; same infrastructure - same rules, agreements, and implementation standards
+- 1.6 Reliable Networks
+    - **Network Architecture Characteristics**:
+        - Fault Tolerance
+            - Redundancy - maintaining multiple paths between end points
+            - Packet-switched network - split traffic into packets routed over a shared network (single message broken into multiple packets, which can take multiple paths to the end host)
+        - Scalability - Use accepted standards and protocols, which allow for easy additions
+        - Quality of Service (QoS) - prioritize time sensitive traffic
+            - Primary mechanism for managing congestion and ensuring reliable delivery
+            - Congestion occurs when bandwidth demand exceeds availability
+        - Security - infrastructure and information
+            - Infrastructure - control access
+            - Information - CIA Triad
+                - **Confidentiality**: only intended and authorized recipients can access data
+                - **Integrity** - info not altered in transmission from origin to destination
+                - **Availability** - timely and reliable access to data services for authorized users
+- 1.7 Network Trends
+    - Bring Your Own Device (BYOD) - any device, with any ownership, used anywhere
+    - Online Collaboration
+    - Video Communications
+    - Cloud Computing
+        - Improves access and storage of data
+        - Business - extends IT Capabilities
+        - Possible due to data centers
+        - Types - Public, Private, Hybrid, Community
+    - Home Trends: Smart home technologies
+    - Powerline Networking: use existing home wiring to connect devices (powerline adapters extend LAN connection ranges using outlets)
+    - Wireless
+        - Wireless Internet Service Provider - connect subscribers to a designated access point
+        - Wireless Broadband Service - like cells
+- 1.8 Network Security
+    - Common External Threats:
+        - Viruses, Worms, Trojan - malicious software
+        - Spyware and Adware - secretly collect info
+        - Zero-Day Attacks - new vulnerabilities
+        - Threat Actor Attacks - attack other devices/networks
+        - Denial of Service Attacks - slow/crash apps on network devices
+        - Data Interception and Theft
+        - Identity Theft
+    - Security Solutions
+        - SOHO:
+            - **Antivirus -** malicious code
+            - **Firewall** Filtering - unauthorized access; **host-based**: blocks access to end device
+        - Corporate:
+            - dedicated firewall systems - filter large traffic w/ more granularity
+            - Access Control List - IP Address / App filter
+            - Intrusion prevention systems (IPS) - ID fast-spreading threats (i.g. zero hour)
+            - Virtual Private Networks (VPN) - secure remote access
