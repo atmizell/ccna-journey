@@ -1,5 +1,7 @@
 # Module 6: Data Link Layer (Layer 2)
 
+**Relevant JITL Video**: Day 9 - Switch Interfaces
+
 - 6.1 Purpose of the Data Link Layer
     - Functions:
         - Enables upper layers to access the media (upper layers unaware of media type); provides media access control (MAC)
