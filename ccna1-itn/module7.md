@@ -1,5 +1,7 @@
 # Module 7: Ethernet Switching
 
+**Relevant JITL Video**: Day 9 - Switch Interfaces
+
 - 7.1 Ethernet Frames
     - Ethernet Encapsulation
         - **Ethernet**: LAN Technology, wired connections (twisted, fiber, coax), operates in the Data Link Layer (2) and Physical Layer (1); defined in IEEE 802.2 + 802.3 standards; bandwidth 10 Mbps - 100 Gbps
