@@ -1,0 +1,86 @@
+# Module 7: Ethernet Switching
+
+- 7.1 Ethernet Frames
+    - Ethernet Encapsulation
+        - **Ethernet**: LAN Technology, wired connections (twisted, fiber, coax), operates in the Data Link Layer (2) and Physical Layer (1); defined in IEEE 802.2 + 802.3 standards; bandwidth 10 Mbps - 100 Gbps
+    - Data Link Sublayers - LLC / MAC
+        - **LLC** - comm b/w networking software and device hardware; place info in the frame (ID Network Layer protocol - IPv4 / IPv6)
+        - **MAC** - implemented in hardware, responsible for data encapsulation and media access control; provides Data Link Layer addressing, integrates w/ physical layer tech; encapsulation includes:
+            - **Ethernet Frame** - internal structure
+            - **Ethernet Addressing** - source + destination MAC (NICs)
+            - **Ethernet Error Detection** - frame includes a Frame Check Sequence (FCS) trailer
+        - Ethernet IEEE 802.3 Ethernet Standards
+            - 802.3u - Fast Ethernet (100BASE-T)
+            - 802.3z - Gigabit Ethernet over Fiber (?)
+            - 802.3ab - Gigabit Ethernet over Copper (1000BASE-T)
+            - 802.3ae - 10 Gb Ethernet over Fiber (?)
+        - Ethernet over half-duplex medium uses contention-based access method (Wired = CSMA/CD, provides back-off algorithm for retrans); Full Duplex do not require access control
+    - Ethernet Frame Fields
+        - Ethernet Frame Size: Min 64 bytes, Max 1518 bytes (all bytes from Dest MAC to FCS fields, preamble not included)
+            - Frame size may be larger if additional requirements are included, such as VLAN tagging
+            - Frame < 64 bytes = “collision fragment” or “runt frame”
+            - Frame > 1500 bytes = “jumbo” or “baby giant frame”
+            - Frames outside min/max are dropped (considered invalid)
+        - **Frame Fields** - Left to Right:
+            - **Preamble and Start Frame Delimiter (7+1 bytes)**: used for synchronization, prepare nodes to receive frame
+            - **Destination MAC (6 bytes)**: ID intended recipient; can be unicast, multicast, or broadcast address
+            - **Source MAC (6 bytes)**: ID the originating NIC or interface of the frame
+            - **Type/Length (2 bytes)**: ID upper layer protocol encapsulated in the Ethernet frame; also known as EtherType, Type, or Length; common values:
+                - IPv4 = 0x0800
+                - IPv6 = 0x86DD
+                - ARP = 0x0806
+            - **Data (46-1500 bytes)**: encapsulated data from higher layer (L3PDU or IPv4 Packet); must be ≥ 46 bytes, so may include “pad bits” to meet min size
+            - **FCS (4 bytes)**: detect errors using Cyclic Redundancy Check (CRC); send/receive perform CRC calculation and compare results for error check - no match, drop frame
+- 7.2 Ethernet MAC Address (Burned in Address)
+    - IPv6 and Ethernet addresses are represented with hexadecimal; Ethernet MAC consists of a 48-bit binary value, expressed using 12 hexadecimal values (represented with 0x, subscript 16, or trailing H)
+    - MAC used to ID physical device (Layer 2) in an Ethernet LAN
+    - MAC = 48 bits = 6 bytes = 12 hexadecimal values
+    - All vendors assign MAC as follows:
+        - First six hexadecimals - Organizationally Unique Identifier (OUI)
+        - Last six hexadecimals - Unique vendor code for the device
+    - Frame Processing
+        - MAC = Burned in Address b/c hard coded into Read-Only Memory (ROM) on the NIC
+        - On boot, NIC copies the MAC from ROM onto RAM, allows for encoding during encapsulation
+        - Ethernet NICs will accept frames if the destination MAC matches theirs, or if it is broadcast/multicast
+    - Unicast MAC: source device utilizes **Address Resolution Protocol (ARP)** in IPv4 to determine the destination MAC address; in IPv6 this is known as **Neighbor Discovery (ND)**; *Source MAC must always be unicast*
+    - Broadcast MAC:
+        - Address: FF-FF-FF-FF-FF-FF
+        - Flooded out of all ethernet switch ports except incoming
+        - It is not forwarded by a router
+        - DHCP for IPv4 is an example of a protocol that uses Ethernet and IPv4 broadcast addresses
+        - Not all Ethernet broadcasts carry an IPv4 broadcast packet; ARP sent as Ethernet broadcast, but does not use IPv4
+    - Multicast MAC
+        - Multicast addresses can only be used as a destination
+        - IPv4 Multi Packet: Destination MAC address of 01-00-5E
+            - IPv4 multi range: 224.0.0.0 - 239.255.255.255
+        - IPv6 Multi Packet: Destination MAC address of 33-33
+            - IPv6 multicast addresses begin with ff00::/8
+        - Other reserved addresses for other protocols, like Spanning Tree Protocol (STP) and Link Layer Discovery Protocol (LLDP)\
+        - Flooded out of all ethernet switch ports except incoming (unless switch configured for multicast snooping)
+        - Not forwarded by router unless configured
+- 7.3 MAC Address Table
+    - Layer 2 Switches use Layer 2 Source MAC Addresses to make forwarding decisions, unaware of data carried
+    - Switch examines its **MAC address table** (content addressable memory)
+        - Learn: dynamically builds table by using source MAC addresses received in frames on a port. If address not yet present, add source address with port number to the table. Address remains in table for 5min (Aging)
+        - Forward (destination unicast): if address in table, forward frame out respective port; not in table, forward frame out all ports except incoming (unknown unicast)
+    - If broadcast or multicast frame is received, Switch floods the frame out all ports except incoming
+    - Switch can have multiple MAC addresses associated with single port (like in switch-switch connections)
+    - When device has an IP Address on a remote network (not connected), Ethernet frame is sent to the MAC Address of the Default Gateway (the router)
+- 7.4 Switch Speeds and Forwarding Methods
+    - Frame Forwarding Methods
+        - **Store-and-Forward Switching**: receive entire frame, compute CRC, then forward if valid (reduces bandwidth consumed by corrupt data; required for Quality of Service analysis)
+        - **Cut-Through Switching**: fwd frame before entirely received; minimum destination address read
+            - **Fast-Forward switching** - typical method, immediate fwd; low latency (measured from first bit received to first bit transmitted); may send packets with errors, which will be dropped by receiving NICs
+            - **Fragment-Free switching** - store first 64 bytes of frame before forwarding (small check error); compromise between store-and-forward and fast-forward
+        - *Note*: Some switches are configured to perform cut-through switching on a per port basis until a *user-defined threshold* is reached, which changes them to store-and-forward
+    - Memory Buffering on Switches
+        - Buffering may be used to store frames before forwarding them, or when destination port is congested
+        - Methods:
+            - **Port-Based Memory** - frames stored in ques linked to specific ports; possible for delays due to busy destinations
+            - **Shared Memory** - all frames in common buffer across all ports, dynamically allocate buffer memory; allows for dynamic transmission without moving frames through ques; allows for storing larger frames with fewer dropped frames (asymmetric switching)
+    - Duplex and Speed Settings
+        - Critical that duplex and bandwidth match between switch port and connected devices
+        - **Auto negotiation** is an optional function found on most Ethernet switches and NICs, allowing devices to negotiate the best speed and duplex
+            - Gigabit Ethernet defaults to Full Duplex
+            - Duplex mismatch is common performance issue on 10/100Mbps links, can occur when ports are reset which changes the config
+    - **Auto-MDIX** (Automatic Medium-Dependent Interface Crossover): detects cable type and configures the interface accordingly, minimizing specific cabling requirements (straight/cross on 10/100/1000 copper cables)
