@@ -1,0 +1,84 @@
+# Module 6: Data Link Layer (Layer 2)
+
+- 6.1 Purpose of the Data Link Layer
+    - Functions:
+        - Enables upper layers to access the media (upper layers unaware of media type); provides media access control (MAC)
+        - **Accepts data** (usually Layer 3 packets - IPv4 or IPv6) and **encapsulates** them into Layer 2 Frames
+            - Add L2 Ethernet destination and source NIC information to a L3 Packet
+        - **Controls how data is placed** and received on the media; responsible for NIC (Responsible for specifying the encapsulation method used for specific types of media)
+        - **Exchanges frames** between endpoints over network media
+        - **Receive encapsulated data** (Layer 3 packets), and direct them to the proper upper layer protocol
+        - Performs **error detection** and rejects any corrupt frames
+    - IEEE 802 LAN/MAN **Data Link Sublayers**
+        - *Note - Standards*: Ethernet LAN, WLAN, WPAN, Metropolitan Area Networks (MAN)
+        - **Logical Link Control (LLC → Network to Data Link)**: place info in frame, ID frame network protocol; allows IPv4 and IPv6 to use the same network interface and media
+        - **Media Access Control (MAC → Data Link to Physical)**: implements sublayer in hardware (provide method to get frame on/off media); responsible for data encapsulation:
+            - **Frame Delimiting**: ID fields within frame; provide synchronization b/w send/receive nodes
+            - **Addressing**: provide source/destination addresses
+            - **Error Detection**: include trailer for checking transmission errors
+            - **Media Access Control**: allow multiple devices to communicate over a shared (half-duplex) medium [Full Duplex comms don’t require access control]
+    - Providing Access to Media
+        - At each hop along the path, a router performs the following L2 functions:
+            - Accept frame from medium
+            - De-encapsulates the frame
+            - Re-encapsulates the packet into a new frame
+            - Fwd the new frame appropriate for the medium of that segment of the physical network
+    - Data Link Layer Standards: IEEE, ITU, ISO, ANSI
+- 6.2 Topologies
+    - **Physical Topology**: identify physical connections, may include specific locations; often point-to-point or star
+    - **Logical Topology**: virtual connections using device interfaces and L3 IP Addressing schemes; refers to the network transfer of frames between nodes; influences the type of network framing and MAC used
+    - WAN Topology:
+        - **Point-to-Point**: permanent link b/w two endpoints
+        - **Hub-and-Spoke**: WAN star; central site interconnects branched sites
+        - **Mesh**: interconnected system; high availability, but high admin/physical cost (each link = P2P with other node)
+        - **Hybrid**: variation/combination of any topology (i.e. extended star)
+    - Point-to-Point WAN Topology:
+        - **Point-to-Point Protocol (PPP)** - limited to two nodes; a node does not have to make any determination about whether an incoming frame is destined for it or another node; therefore, the logical data link protocols can be simple (source to destination, “black box” middle)
+    - LAN Topologies
+        - Extended Star - interconnects multiple ethernet switches
+        - Star Topologies are easy to install and very scalable (add/remove devices)
+        - Legacy Topologies:
+            - Bus - all end systems chained to each other, often used coax; switches not required to connect end devices
+            - Ring - end systems connected to their neighbors (Legacy Fiber Distributed Data Interface and Token Ring Networks)
+    - Half and Full Duplex Communication (LAN)
+        - Half - devices cannot communicate simultaneously (restrict exchange)
+        - Full - simultaneous TX and RX
+        - Important that connected interfaces operate with the same duplex mode; otherwise collisions, inefficiencies, and latency can occur
+    - Access Control Methods (Half-Duplex Communication)
+        - **Collision**: corruption that occurs if two devices using half-duplex attempt to communicate simultaneously
+        - Contention-Based Access: avoid half-duplex conflicts
+            - Carrier Sense Multiple Access with Collision Detection (CSMA/CD): used on legacy bus-topology Ethernet LANs
+            - Carrier Sense Multiple Access with Collision Avoidance (CSMA/CA): used on wireless LANs
+        - Controlled Access: each node has its own time to use the medium (legacy)
+            - Legacy Token Ring
+            - Legacy ARCNET
+        - *Note*: Today, Ethernet networks operate in Full Duplex and do not require Access Method
+- 6.3 Data Link Frame
+    - **The Frame**: info appended is determined by the protocol being used
+        - Parts include the Header, Data, and Trailer
+        - Control info in frame depends on the access control requirements of the media and logical topology (i.e. WLAN needs Collision Avoidance)
+        - Frame Fields - break stream into decipherable groupings; generic fields (not included by all protocols):
+            - **Frame Start/Stop Indicators** - ID limits of frame
+            - **Addressing** - ID source/destination nodes on media
+                - Order: Destination NIC, Source NIC; Source IP, Destination IP
+            - **Type** - ID the L3 Protocol
+            - **Control** - ID flow control services [i.e. Quality of Service (QoS), gives priority to certain messages (like VoIP)]
+            - **Data** - frame payload (packet header, segment header, data)
+            - **Error Detection** - included after data to form the trailer; checked by placing a **Cyclic Redundancy Check (CRC)** value, placed in the **Frame Check Sequence (FCS)** field
+    - Layer 2 Addresses (“Physical Addresses”) - only used for local delivery
+        - Placed early for NICs to determine frame relevancy
+        - Do not indicate device network, just the unique physical address of the device
+        - Source physical address is replaced by each node in frame through re-encapsulation
+    - **MAC Notes** (Hack the Box - Intro to InfoSec)
+        - MAC Halves: Organizationally Unique Identifier (OUI) + Individual Address Part / Network Interface Controller
+        - Last two bits in the first octet can play a critical role:
+        Typical Form: DEAD.BEEF.1337
+        Hex: DE | AD | BE | EF | 13 | 37
+        Binary: 1101 1110 | 1010 1101 | 1011 1110 | 1110 1111 | 0001 0011 | 0011 0111
+            - Last Bit: Unicast (0), Multicast (1)
+            - 2nd-to-last bit: Global OUI (0), Locally Administered (1)
+    - LAN and WAN Frames
+        - Common WAN Protocols: PPP, High-Level Data Link Control (HDLC), Frame Relay, Asynchronous Transfer Mode (ATM), X.25
+        - These Layer 2 protocols are now being replaced in the WAN by Ethernet
+        - Layer 2 protocols depend on the network topology and technology
+        - Data Link Protocols: Ethernet, 802.11 Wireless, PPP, HDLC, Frame Relay
