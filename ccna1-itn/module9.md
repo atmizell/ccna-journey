@@ -1,5 +1,7 @@
 # Module 9: Address Resolution
 
+**Relevant JITL Video**: Days 5/6 - Ethernet LAN Switching
+
 - 9.1 MAC and IP
     - Destination on Same Network: utilize layer 2 physical (MAC) addresses
     - Destination on Remote Network:
