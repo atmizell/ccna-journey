@@ -1,0 +1,110 @@
+# Module 17: Build a Small Network
+
+- Terms
+    - FTP Secure (FTPS)
+    - Secure FTP (SFTP)
+- 17.1 Devices in a Small Network
+    - **Small networks** typically have a single WAN connection provided by DSL, cable, or an ethernet connection; typically managed by a local IT technician or contracted professional
+    - Network Device Selection Factors: cost, speed, types of ports/interfaces, expandability, OS features and services
+    - IP Addressing Scheme - used on end/intermediary devices, servers, peripherals
+    - Redundancy accomplished by installing duplicate equipment or supplying duplicate network links for critical areas
+    - Routers and Switches should be configured to support real-time (voice and video) traffic in an appropriate manner relative to other data traffic; implement **Quality of Service (QoS)** to classify traffic according to priority
+- 17.2 Small Network Applications and Protocols
+    - Software Providing Net Access:
+        - **Network applications** - used to communicate over the net
+            - Some end-user apps implement application layer protocols to communicate directly with lower layers of the protocol stack (i.e. email, web browsers)
+        - **Application layer services** - assistance in using network resources (file transfer, print spooling); interface with network, prepare data for transfer
+    - Protocols provide standards and data formats to use
+        - Protocols Define: processes on either end, types/syntax of messages, meaning of info fields, how messages sent, interaction with the next lower layer
+        - Remote access: Telnet (unsecure), SSH (secure)
+        - Admins must also support common network servers: web, email, FTP, DHCP, DNS
+        - Servers can provide multiple services (i.e. email, FTP, SSH)
+- 17.3 Scale to Larger Networks
+    - Scale requires:
+        - network documentation - physical/logical topology
+        - device inventory
+        - budget - itemized IT budget
+        - traffic analysis - protocols, applications, services and their respective traffic requirements (type, current traffic flow)
+    - Traffic Analysis: capture during peak utilization time (represent types), and capture on different network segments
+    - Net Admins must know how network use is changing
+    - Snapshot - capture usage details of employee computers (Windows Task Manager, Event Viewer, Data Usage)
+- 17.4 Verify Connectivity
+    - Ping - test layer 3 connectivity
+        - uses echo request (ICMP Type 8) and echo reply (ICMP Type 0)
+        - ! (success), . (time expired), U (Type 3, dest unreachable)
+        - Extended Ping - adjust parameters, use in priv EXEC mode
+        - ping ipv6 - extended IPv6 ping
+    - **Traceroute** - locate layer 3 problem areas, provides hop list
+        - Windows: tracert
+        - Cisco: traceroute
+        - Extended traceroute - adjust parameters
+        - In Windows, interrupt with Ctrl+C
+        - In Cisco, interrupt with Ctrl+Shift+6
+    - Output provided by network commands contributes data to the network baseline
+        - Start baseline - copy and paste the results from an executed ping, trace, etc. into a text file; timestamp file, save to archive
+        - Baselines should be established at regular intervals over a period of time, and at various network segments
+    - Note: Ctrl+Shift+6 → interrupt command
+- 17.5 Host and IOS Commands
+    - ipconfig - view IP info (address, mask, router, DNS); additional:
+        - /all - view MAC and Layer 3 details
+        - /release - terminate DHCP IP lease
+        - /renew - renew DHCP IP lease
+        - /displaydns - display all cached DNS entries
+    - Linux:
+        - ifconfig - display active interfaces and their IPs
+        - ip address - display addresses and their properties; can be used to add or delete addresses
+    - Mac - Network Preferences > Advanced (IP addressing)
+        - Commands: ifconfig, networksetup -installnetworkservices, networksetup -getinfo <*network service*>
+    - arp command lists all devices in ARP cache (IPv4 address, physical address, type (static/dynamic)
+        - arp -a displays known IP address and MAC address binding
+        - netsh interface ip delete arpcache - clear arp cache (admin)
+    - **Show** commands
+        - running-config - verify running configuration
+        - interfaces - verify interface statuses
+        - ip interface - verify Layer 3 info of an interface
+        - ip interface brief - displays all interfaces on the router, the IP address assigned to each interface, operational status
+        - arp - verify list of known hosts on local Ethernet LAN
+        - ip route - verify layer 3 routing info
+        - protocols - verify operational protocols
+        - version - verify memory, interfaces, licenses of device
+        - cdp neighbor - CDP neighbor device info: identifiers, address list, port identifier, capabilities list, platform
+        - cdp neighbors detail - determine if CDP neighbor has an IP config error
+    - *Note*: CDP can be disabled globally [(config)# no cdp run] or on a specific interface [(config-if)# no cdp enable]
+- 17.6 Troubleshooting Methodologies
+    - Steps:
+        1. ID the problem
+        2. Establish a theory of probable causes
+        3. Test the theory to determine the cause
+        4. Establish a plan of action and implement the solution
+        5. Verify the solution and implement preventative measures
+        6. Document finding, actions, and outcomes
+    - **Escalation**: problem should be escalated when it requires a decision of a manager, some specific expertise, or network access level (Company policy should detail escalation criteria)
+    - Status - OS processes, protocols, and mechanisms and events generate messages to communicate their status
+        - **Debug Command**
+            - IOS debug command allows admin to display these messages in real time for analysis (intent is to capture live output for short period of time)
+            - use debug ? to view all possible parameters
+            - Important to use only necessary params due to CPU use
+            - Turn off specific feature using the no command
+            - undebug all to turn off all debug processes
+        - **Terminal Monitor Command**
+            - Debug output messages are sent to the **console line** by default (not default visible on vty lines - remote)
+            - Display terminal log messages (priv EXEC): terminal monitor
+- 17.7 Troubleshooting Scenarios
+    - *Basic Connectivity* = Same Speed, Same Duplex, Same VLANs
+    - **Duplex** communication modes: half, full
+        - must match duplex on each ends to avoid mismatch
+    - Ensure **IP addresses** are properly assigned; errors caused by manual assignment mistakes or DHCP-related issues
+        - **Automatic Private IP Addressing (APIPA)**: When a device cannot copy a DHCP server, Windows will auto-assign an IPv4 address belonging to the 169.254.0.0/16 range
+        - Verify addresses: show ip interface or show ip interface brief
+    - Must have a correctly configured **default gateway** to communicate with remote devices
+        - Verify default gateway (Windows): ipconfig
+        - Router: show ip route
+    - DNS failures
+        - Verify DNS Server (Windows): ipconfig/all
+        - Manual DNS queries: nslookup
+        - Webpage error? ping 8.8.8.8 (Google’s public DNS server)
+            - check if device has an active connection to the internet (local router good); good latency test
+            - if good, then likely ISP DNS server down/error
+        - Cisco offers OpenDNS - provides secure DNS service by filtering phishing and some malware sites 
+        Preferred DNS Server: 208.67.222.222
+        Alt DNS Server: 208.67.220.220
