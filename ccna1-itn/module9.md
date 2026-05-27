@@ -1,0 +1,61 @@
+# Module 9: Address Resolution
+
+- 9.1 MAC and IP
+    - Destination on Same Network: utilize layer 2 physical (MAC) addresses
+    - Destination on Remote Network:
+        - Destination IP on remote network
+        - Original Destination MAC on the host default gateway (i.e., router interface)
+        - Router: examines destination IP to determine best path, de-encapsulates layer 2 information, determine next hop device, encapsulate IPv4 packet in new data link frame for outgoing interface
+    - How to associate IP and MAC addresses in each link: ARP (IPv4), Neighbor Discovery (IPv6)
+    - Router Component - RAM: Holds Routing Table, ARP Cache, and Run Config
+- 9.2 IPv4 ARP
+    - ARP used in IPv4 to map IPv4 addresses to MAC addresses
+        - Resolves IPv4 Addresses to MAC Addresses
+        - How does ARP Process use an IPv4 Address: determine the MAC address of a device on the same network
+        - Maintains a table of IPv4 to MAC address mappings
+            - View ARP Table: arp -a
+            - On network 192.168.1.0/24, and address entry of 192.168.1.255 ff-ff-ff-ff-ff-ff is: a static map entry
+    - Functions
+        - When packet is sent to data link layer for encapsulation, device refers to the ARP table (or ARP cache) in RAM memory
+        - If packet **local** (same subnet mask), device searches ARP table for destination IPv4
+        - If packet **remote** (different subnet), device searches ARP for IPv4 address of the default gateway (router interface)
+            - ARP Provides the MAC address of the router interface closest to the sending host
+        - If no entry is found, device sends an ARP Request
+        - *Note*: ARP table entries expire using time stamps; entries can be manually added (static), which cannot expire (this is rarely done)
+            - Newer Windows systems store ARP entries for 15 to 45 seconds
+    - **ARP Request**: used to determine MAC address not in table
+        - Encapsulated in ethernet frame (no IPv4 header):
+            - **Destination MAC** - broadcast (FF-FF-FF-FF-FF-FF)
+                - Switch floods message out all ports, except receiving
+                - Router will not forward broadcasts out of other interfaces
+            - **Source MAC** - sender
+            - **Type** - Field of 0x0806 (informs receiver that data of message needs to be passed to the ARP Process)
+        - **Msg format**: Dest MAC, Source MAC; Source IP, Destination IP
+        - **ARP Format**: Dest MAC (FF-FF), Source MAC; Target IPv4, Target MAC ???
+    - **ARP Reply**:
+        - Only device with target IPv4 will respond
+        - Destination MAC - MAC of ARP Request sender
+        - Source MAC - MAC of ARP Reply sender
+        - Type - 0x0806
+    - ARP on Networking Devices
+        - Cisco Router - Display ARP table: show ip arp
+        - Windows PC: arp -a
+        - Clear ARP Cache on a PC (i.e. after router reconfigured): arp -d *
+    - ARP Issues
+        - **ARP broadcasts** large number of new hosts can flood local media, causing temporary congestion
+        - **ARP Spoofing**: threat actors can perform an ARP Poisoning attack (reply to an ARP request pretending to be destination)
+            - Switches can mitigate with *Dynamic ARP Inspection (DAI)*
+- 9.3 IPv6 Neighbor Discovery
+    - Provides address resolution, router discovery, and redirection services for IPv6 using ICMPv6
+    - Defined in IETF RFC 4861
+    - ICMPv6 messages used during the Ethernet MAC address resolution process: Neighbor Solicitation and Neighbor Advertisement
+    - Five message:
+        - Address Resolution - Used to determine MAC address of a known IPv6
+            - **Neighbor Solicitation**: device-device (*ARP Request*)
+                - Sent using Ethernet + IPv6 multicast addresses
+            - **Neighbor Advertisement**: device-device (*ARP Reply*)
+                - Response to Neighbor Solicitation, includes MAC address
+        - Router Discovery - used for dynamic address allocation and **Stateless Address Configuration (SLAAC)**
+            - **Router Solicitation**: device-router (*ARP Request*)
+            - **Router Advertisement**: device-router (*ARP Reply*)
+        - Redirection **- Redirect Message**: next-hop selection
