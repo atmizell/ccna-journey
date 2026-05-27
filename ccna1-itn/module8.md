@@ -1,0 +1,94 @@
+# Module 8: Network Layer (Layer 3)
+
+- 8.1 Network Layer Characteristics
+    - Provide services to allow end devices to exchange data across networks; protocols include:
+        - **Communication**: IPv4 and IPv6
+            - Specify the packet structure and processing used to carry the data between hosts; enables handling of various data
+        - **Network**: Open Shortest Path First (OSPF)
+        - **Messaging**: Control Message Protocol (CMP)
+    - **Network Layer Protocols** - Basic Operations:
+        - **Addressing End Devices** - configure end devices with unique IP Address for identification
+        - **Encapsulation** - Encapsulate Transport PDU (Segment) into a Packet - add IP Header info; performed by the source of the IP Packet
+        - **Routing** - direct packets to destinations; packets processed by routers, which choose best path (Each router in path = hop)
+        - **De-encapsulation** - at destination host, if stored destination matches the host then header is removed and passed up
+    - IP Encapsulation - encapsulates the transport layer segment; IP information remains the same till it reaches destination host - except when translated by device performing **Network Address Translation (NAT)** for IPv4
+    - IP Characteristics: reliant on other layers for delivery, sequencing, and error checking
+        - **Connectionless** - no pre-established destination connection
+        - **Best Effort** - delivery not guaranteed, unreliable; reduces overhead, no retrans capabilities
+        - **Media Independent** - method doesn’t matter
+            - Network layer considers max size of the PDU that each media can transport (Max Transmission Unit - MTU), which may result in fragmenting the packet causing latency (IPv6 packets cannot be fragmented by router)
+            - How does Network Layer use the MTU: passed to the network layer from the data link layer to determine the largest data packet it can forward without exceeding the physical network’s capabilities
+- 8.2 IPv4 Packet
+    - Header - used to ensure packet delivered, fields:
+        - **Version**: 4-bit value (0100) to ID as IPv4 packet
+        - **Differentiated Services** (DiffServ, DS; Type of Service): 8-bit field used to determine packet priority
+            - 6 bits = Differentiated Services Code Points (DSCP), most important!
+            - last 2 bits = Explicit Congestion Notification (ECN)
+        - **Time to Live (TTL)**: 8-bit value used to limit packet lifetime; set at source, decreased by one at each router.
+            - If zero, discarded by router and sends an Internet Control Message Protocol (ICMP) Time Exceeded message to source; router recalculates the *Header Checksum*
+        - **Protocol**: 8-bit, ID next level protocol, indicates data payload type (i.e. ICMP (1), TCP (6), and UDP (17))
+        - **Header Checksum**: used to detect corruption in IPv4 Header
+        - **Source IPv4 Address**: 32-bit value of source IPv4 address (Always Unicast)
+        - **Destination IPv4 Address**: 32-bit value of destination IPv4 - can be unicast, broadcast, or multicast
+    - Validate packets using Internet Header Length (IHL), Total Length, and the Header Checksum values; other fields are used to reorder a fragmented packet (identification, flags, fragment offset fields)
+    - **Ping Loopback Interface**: 127.0.0.1
+        - Loopback test provides info on whether the device’s network interface, drivers, and TCP/IP protocol stack are functioning correctly
+- 8.3 IPv6 Packet
+    - IPv4 Limitations
+        - IPv4 Address Depletion: limited unique public addresses available (only 4 billion)
+        - Lack of End-to-End Connectivity: NAT commonly implemented, provides multiple devices with same public IPv4 address - problematic for tech requiring end-to-end connectivity
+            - NAT extended lifespan of IPv4; intended as a transition mechanism to IPv6
+        - Increased Network Complexity: NAT creates additional complexity, creates latency, makes troubleshooting more difficult
+    - IPv6 Overview - Improvements:
+        - Increased Address Space: 128-bit hierarchal addressing (10^36 Addresses available)
+        - Improved Packet Handling: simplified header, fewer fields
+        - Eliminates need for NAT: NAT b/w private and public IPv4 not needed; avoids NAT complications and latency
+    - IPv6 Header Fields (8):  fixed length of 40 octets
+        - **Version**: 4-bit binary (0110) to indivate IPv6
+        - **Traffic Class**: 8-bit = IPv4 Differentiated Services field (message priority)
+        - **Flow Label**: 20-bit, suggests packets with same flow label receive same handling by routers
+        - **Payload Length**: 16-bit, indicate length of data (does not include IPv6 header, fixed 40 bytes)
+        - **Next Header**: 8-bit, indicate data payload type (pass to appropriate upper layer protocol, like IPv4 Protocol field)
+        - **Hop Limit**: 8-bit, like IPv4 TTL Field; decrements by 1 per hop, packet discarded at zero
+            - IPv6 does not have a checksum because function performed by both lower and upper layers
+        - **Source / Destination IPv6 Addresses**: 128-bits each
+        - (*) May include **Extension Headers** - provide optional network layer info; used for fragmentation, security, mobility; placed b/w IPv6 header and payload
+        - *Note*: Routers do not fragment IPv6 packets
+        - *Removed IPv4 Fields*: IHL, Identification, Flags, Fragment Offset, Header Checksum, Options, Padding
+- 8.4 How a Host Routes
+    - Because packets are always created at the source host, hosts create their own routing table
+    - Network layer directs packets, allowing hosts to send packets to: itself, local host, remote host
+    - Determine if host is local or remote based on IP version:
+        - IPv4 - host compares subnet mask to source/destination
+        - IPv6 - local router advertises the local network address (prefix) to all devices on the network
+    - **Default Gateway** = network device that can route to other networks; usually a router with local IP address, can accept and forward data, routes traffic to other networks
+        - IPv4 - host gets address through DHCP or manual config
+        - IPv6 - router advertises or manual config
+    - Host Routing Tables
+        - Windows: route print or netstat -r commands; displays:
+            - Interface list - MAC address and assigned interface number of every network-capable interface on the host
+            - IPv4 Routing Table - all known IPv4 Routes, including direct connections, local network, and local default routes
+            - IPv6 Routing Table - Same as IPv4
+- 8.5 Introduction to Routing
+    - Router Packet Forwarding Design
+        - (1) Packet arrives on an interface, de-encapsulates the Layer 2 Ethernet header and trailer
+        - (2) Router examines the destination IPv4 address of packet and searches for the best match in its IPv4 Routing Table (**route entries** = **network prefixes**)
+        - (3) Router encapsulates the packet into a new Ethernet header and trailer and forwards the packet to the next hop router
+    - **IP Router Routing Table** - contains Network Route Entries
+        - **Directly-Connected Networks**: active **router interfaces**, added when an interface is configured with an IP address and activated; each interface connected to a different **Network Segment**
+        - **Remote Networks**: other routers, found through dynamic routing protocol or manually configured (Static Routing)
+            - **Static routing** is manually set and is not automatically updated if the network topology is reconfigured; good for small networks with few/no redundant links
+            - **Dynamic Routing** allows for automatic learning; compensates for topology changes; includes OSPF and Enhanced Interior Gateway Routing Protocol (EIGRP)
+                - Automatically: discovers remote networks, maintain updated routing info, choose best path, attempt to find new best path
+        - **Default Route**: gateway of last resort, used when no better/longer matches in IP routing table
+    - **IPv4 Routing Table** (No Labels when pulled): show ip route
+        - Top = Letter codes indicating how each route was learned (route source)
+            - L - directly connected local interface IP address
+            - C - directly connected network
+            - S - static route manually configured by admin
+            - O - OSPF
+            - D - EIGRP
+        - **Routing Table Entries**: all known networks and how to reach, including Static Default Route
+            - *Contains*: Route Source Code, IP Address, [administrative distance, metric], Next Hop Address, Last Update Time Stamp, Exit Interface
+                - Admin Distance - trustworthiness of source, used for determining best path
+                - Metric - used by router to determine best path (best path = lower metric value), calculated using hop path, bandwidth, etc.
