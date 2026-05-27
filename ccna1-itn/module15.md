@@ -1,0 +1,131 @@
+# Module 15: Application Layer (Layer 5)
+
+- Terms
+    - Uniform Resource Locator (URL) - web, client
+    - Uniform Resource Identifier (URI) - web, server
+    - Transport Layer Security (TLS) - HTTPS encryption
+    - Secure Socket Layer (SSL) - legacy HTTPS encryption
+- 15.1 Application, Presentation, and Session
+    - **Application Layer** (TCP/IP, OSI Models)
+        - Closest layer to the end user; provides interface b/w applications used to communicate and the underlying network
+        - Common Protocols: DNS, HTTP, SMTP, POP, DHCP, FTP, IMAP
+    - **Presentation and Session Layer** (OSI)
+        - **Presentation Layer** - 3 primary functions: 
+        format, compression, encryption
+            - Formatting, or presenting, data at the source device into a compatible format
+            - Compressing data in a way that can be decompressed
+            - Encrypting data for transmission and decrypting data upon receipt
+            - Well known formatting standards: Matroska video (MKV), Motion Pictures Expert Group (MPG), Quick Time (MOV), Graphics Interchange Format (GIF), Joint Photographic Experts Group (JPEG), Portable Network Graphics (PNG)
+        - **Session Layer** - create and maintain dialogs b/w applications; handles info exchange to initiate dialogs, keep them active, and restart sessions disrupted/idle
+    - TCP/IP Application Layer Protocols
+        - **Domain Name System** (DNS): TCP, UDP 53; translates domain names into IP addresses
+        - Host Config
+            - **Bootstrap Protocol (BOOTP)**: UDP client 68, server 67; enables diskless workstation to discover its own IP address, IP address of a BOOTP server on network, and a file to be loaded into memory to boot the machine (superseded by DHCP)
+            - **Dynamic Host Configuration Protocol (DHCP)**: UDP client 68, server 67; dynamically assigns IP addresses to be re-used when no longer needed
+        - Email
+            - **Simple Mail Transfer Protocol (SMTP)**: TCP 25; enable clients/servers to send mail to servers
+            - **Post Office Protocol v3 (POP3)**: TCP 110; enables clients to retrieve email from mail server; download email to local mail application of the client
+            - **Internet Message Access Protocol (IMAP)**: TCP 143; enables clients to access email stored on a mail server, maintains email on the server
+        - File Transfer
+            - **File Transfer Protocol (FTP**): TCP 20 to 21; sets rules enabling hosts to access and transfer files from each other; reliable, connection-oriented, acknowledged
+            - **Trivial File Transfer Protocol (TFTP)**: UDP client 69; simple, connectionless FTP with best-effort, unacknowledged delivery; less overhead
+        - Web
+            - **HTTP**: TCP 80, 8080; set of rules for exchanging text, graphic images, sound, video, and multimedia on WWW
+            - **HTTPS**: TCP, UDP 443; encryption-secured HTTP, authenticates website to which you are connecting your browser
+- 15.2 Peer-to-Peer
+    - Client-Server Model: request (client), respond (server)
+    - Peer-to-Peer (P2P) Networks: data access from peer
+        - P2P Network - every connected device can be both client and server (i.e. printers and files)
+        - P2P Apps - device can be both client/server in same communication; each provides user interface and runs a background service (hybrid - each peer accesses an index server to get location of a resource stored on another peer)
+            - Common Apps: BitTorrent, Direct Connect, eDonkey, Freenet
+                - BitTorrent allows users to share pieces of many files with each other at the same time
+            - Some apps use ***Gnutella protocol***, each user shares whole files with other users
+- 15.3 Web and Email Protocols
+    - **HTTP and Hypertext Markup Language** - How web browser and web servers interact
+        1. browser interprets URL: 
+        HTTP (protocol used), 
+        www.xx.com (server name) → .com (top-level domain)
+        index.html (the specific filename requested)
+        2. browser checks name server to convert server name into IP address, used to connect to the server; send HTTP request (GET request) asking for the index.html file
+        3. server sends HTML code to the browser
+        4. browser deciphers HTML code and formats the page
+    - **HTTP and HTTPS** - request/response protocol:
+        - **GET** - client req for data
+        - **POST** - uploads data files to web server (form data)
+        - **PUT** - uploads resources or content to web server (image)
+        - HTTPS secures with authentication and encryption (TLS/SSL)
+    - **Email Protocols** - store-and-forward method of sending, storing, and retrieving messages across a network; emails stored in databases on mail servers
+        - Application layer that sends mail uses SMTP; client retrieves mail with POP or IMAP
+        - **Simple Mail Transfer Protocol (SMTP, 25)** - server
+            - Requires **message header** (receipt/sender address) and **message body** (any amount of text)
+            - client sends email to server, which is then delivered (local) or forwarded (remote)
+            - SMTP can “spool” messages in a que to be sent at a later time if server offline/busy (if not sent by expiration time, returned to sender as undeliverable)
+        - **Post Office Protocol (POP, 110)** - client, TCP, common
+            - Retrieve mail from server - downloaded to client then deleted from server (not recommended for those requiring centralized backup solution)
+            - server listens on port 110 for client connection request; connection established, server sends greeting; continues until connection closed or aborted
+        - **Internet Message Access Protocol (IMAP)** - client
+            - Retrieve mail from server - Copies of messages downloaded to client, original msg kept on server until manually deleted
+            - Users can create a file hierarchy on server to organize and store mail (duplicated on email client)
+- 15.4 IPv4 Addressing Services
+    - **Domain Name System (DNS)**
+        - **Fully-Qualified Domain Names (FQDN)** - web addresses like https://www.cisco.com; doesn’t change if numeric IP address changes
+        - **DNS** = automated protocol matching FQDN to IP; includes format for queries, responses, and data; communicates in a message
+        - Steps
+            - User types an FQDN into browser app address field
+            - DNS query sent to designated server for client
+            - DNS server matches FQDN with IP
+            - DNS query response sent to client with IP address
+            - Client uses IP address to make requests of the server
+        - DNS Record Format
+            - **Name** - FQDN
+            - **Address** - IP Address
+            - **Type of Record**
+                - **A** - end device IPv4 address
+                - **NS** - authoritative name server
+                - **AAAA** (quad-A) - end device IPv6 address
+                - **MX** - mail exchange record
+            - *Note*: DNS Client Service on Windows stores previously resolved names in memory; ipconfig/displaydns command displays all cached DNS entries
+        - DNS Message Format (QAAA)
+            - **Question** - question for the name server
+            - **Answer** - Resource Records answering question
+            - **Authority** - Resource Records pointing to an authority
+            - **Additional** - Resource Records holding additional info
+        - DNS Hierarchy - naming structures formatted into manageable zones; scalable because spread across multiple servers (manage zones); top-level domains:
+            - .com - business or industry
+            - .org - a non-profit organization
+            - .au - Australia
+            - .co - Columbia
+        - NSLOOKUP Command
+            - Allows user to manually query the name servers to resolve a given host name; used to troubleshoot name resolution issues and verify name server status
+            - Command:
+                - nslookup → default DNS server configured for host is displayed
+                - can enter name of host or domain at the nslookup prompt (i.e. www.cisco.com)
+                - DNS server address can be manually configured or dynamically learned through DHCP
+    - **Dynamic Host Configuration Protocol**
+        - DHCP server located in a dedicated PC-based server (medium-to-large networks), or located on the local ISP router (home)
+        - **Dynamic Addressing**: DHCPv4 auto assigns IPv4 addresses, subnet masks, gateways, and other net parameters
+            - DHCP used for general purpose hosts
+            - Static addressing used for network devices (gateway routers, switches, servers, printers)
+            - DHCPv6 - similar to DHCPv4, but does not provide a default gateway address - which can only be obtained dynamically from the Router Advertisement message of the router
+        - DHCP assigns (leases) IP address from a address range (pool) to host when connected to a network
+        - DHCP Messaging Process
+            - Client sends DHCPDISCOVER message when connecting to network to ID DHCP servers on network
+            - Server responds with DHCPOFFER to provide: IPv4 address + subnet mask, DNS server address, default gateway address; duration of lease
+                - when lease expires, or server receives DHCPRELEASE message, address is returned to the pool
+            - Client sends DHCPREQUEST to ID explicit server and lease offer accepted
+                - If available, server sends acknowledgment (DHCPACK)
+                - If unavailable, server sends negative acknowledgment (DHCPNAK) → restarts discover and request
+            - **DHCPv6 Messages**: SOLICIT, ADVERTISE, INFORMATION REQUEST, REPLY
+- 15.5 File Sharing Services
+    - **File Transfer Protocol (FTP, 20/21)**
+        - FTP client runs on a computer being used to push/pull data from an FTP server; **two connections**
+            - Client establishes server connection for **Control Traffic** (client commands, server replies) on **TCP Port 21**
+            - Client establishes 2nd connection for **Data Transfer** on **TCP Port 20** (created for every data transfer)
+            - Data transfer can happen in either direction; client can download (pull) or upload (push)
+    - **Server Message Block (SMB)**
+        - Client/server, request/response file sharing protocol of shared net resources (directories, files, printers, serial ports); clients establish long-term connection to servers; typical of Microsoft
+        - Functions:
+            - Start, authenticate, terminate sessions
+            - Control file and printer access
+            - Allow app to send/receive messages
+        - Linux uses SAMBA version
