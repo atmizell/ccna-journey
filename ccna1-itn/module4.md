@@ -1,0 +1,95 @@
+# Module 4: Physical Layer (Layer 1)
+
+**Relevant JITL Videos**: Day 2 - Interfaces and Cables
+
+- 4.1 Purpose of the Physical Layer
+    - Physical Connection - Can be wired or wireless
+        - Wireless devices require Wireless Access Points (APs) or wireless routers
+        - Access Point Components: wireless antennas, several ethernet switch ports, and internet port
+    - Physical Layer
+        - Provides the means to transport the bits that make up a data link layer frame across the network media
+        - Accepts frame from Data Link Layer and encodes it as a series of signals transmitted to local media (bits transmitted one at a time)
+- 4.2 Physical Layer Characteristics
+    - Standards
+        - Physical layer consists of electronic circuitry, media, connectors
+        - Organizations: ISO, TIA/EIA, ITU, ANSI, IEEE, FCC, ETSI; regional cabling standards groups
+        - Standards address three functional areas: **physical components, encoding, signaling**
+    - **Physical Components**: hardware devices (NIC), media, connectors (ports and interfaces)
+    - **Encoding**: method of converting a stream of data bits into a predefined code - groupings of bits
+        - Manchester encoding (used in 10 Mbps Ethernet - 10BASE-T): uses high-low voltage transition for 0 and low-high voltage transition for 1
+        - Ethernet 100BASE-TX (Fast Ethernet) uses 4B/5B encoding
+        - 1000BASE-T (Gigabit Ethernet) uses 8B/10B encoding
+    - **Signaling**: the way bits are represented (voltage, light pulse, microwave signal voltage)
+    - **Bandwidth**: capacity at which a medium can carry data
+        - Digital Bandwidth measures the amount of data that can flow from one place to another in a given amount of time
+        - Measured in kilobits/sec (kbps), megabits/sec (Mbps), gigabits/sec (Gbps)
+            - kilo = 1,000; Mega = 1,000,000; Giga = 1,000,000,000
+        - Bandwidth (10Mbps or 100Mbps) are both sent at the speed of electricity over copper wire; the difference is the number of bits transmitted per second
+        - Practical Bandwidth Factors: properties of the physical media, technologies chosen for signaling and detecting network signals
+    - Bandwidth Terminology
+        - **Latency**: amount of time, including delays, for data to travel between points (throughput limited by slowest link in chain)
+        - **Throughput**: measure the transfer of bits across media over a given period of time (usually lower than bandwidth - influenced by type/amount of traffic and latency created by number of devices)
+        - **Goodput**: measure of usable data transferred over a given period of time (throughput minus traffic overhead for establishing sessions, acknowledgments, encapsulation, and retransmitted bits)
+        - goodput < throughput < bandwidth
+- 4.3 Copper Cabling
+    - Characteristics of Copper Cabling
+        - Most common, inexpensive, easy to install, low resistance to electrical current; limited by distance and signal interference
+        - Transfer data with electrical pulses
+        - **Attenuation**: signal deteriorates the further it travels; therefore, copper must follow strict distance limitations (100m)
+        - Timing and voltage susceptible to interference:
+            - *electromagnetic (EMI) / radio frequency (RFI)*: distort or corrupt data signals in copper media (sources: radio waves, fluorescent lights, electric motors)
+            - *Crosstalk*: a disturbance caused by the electric or magnetic fields of adjacent wire signals (electric flow creates magnetic field)
+        - Counter Interference: metallic shielding, opposing circuit wire pairs twisted together; proper environment, cabling technique
+    - Types of Copper Cabling
+        - **Unshielded Twisted Pair (UTP)** - used for interconnecting hosts/devices, terminated with RJ-45 connectors; four pairs of color coated wires twisted together in a plastic sheath
+        - **Shielded Twisted Pair (STP)** - more shielding, difficult install, expensive; RJ45 connectors, terminated with special STP data connectors (grounded); wires wrapped in foil shield and overall metallic braid or foil
+        - **Coaxial Cable** - two conductors share the same axis
+            - Consists of: copper conductor (signal), plastic insulation, copper braid (signal), cable jacket
+            - Connector Types: Bayonet Neill-Concelman (BNC), N type, F type
+            - Used for: Wireless Installations (attach antennas), Cable Internet (SOHO systems); can be bundled with fiber optic
+- 4.4 UTP Cabling
+    - Properties of UTP Cabling - Limit Crosstalk:
+        - Cancellation: wires paired in circuit, magnetic fields cancel
+        - Varying number of twists per pair: UTP follows precise specifications governing how many twists/braid are permitted per meter
+    - UTP Cabling Standards and Connectors
+        - UTP Standards established by TIA/EIA - **TIA/EIA 568** stipulates commercial cabling standards for LAN installations, elements:
+            - Cable types/lengths
+            - Connectors / Cable Termination (RJ45)
+            - Methods of testing cable
+        - Electrical characteristics established by IEEE. Categorizes cables according to bandwidth rates (ex. Category 5 = 100BASE-TX Fast Ethernet). Categories:
+            - 3 - original voice communication, later data
+            - 5 / 5e - data (100 Mbps, 1000 Mbps)
+            - 6 - added separator for higher speeds (up to 10 Gbps)
+            - 7 - up to 10 Gbps
+            - 8 - up to 40 Gbps
+    - Straight-Through and Crossover UTP Cables
+        - Determine the sender/receiver transmission (TX) and receive (RX) termination pins (terminations T568A and T568B)
+        - **Straight-Through** - connect different devices; interconnect host-switch, switch-router
+        - **Crossover** - connect similar devices (switch-switch, etc.)
+        - Crossover considered legacy as NICs use **Medium-Dependent Interface Crossover (Auto-MDIX)** to automatically detect the cable type and make the internal connection
+        - **Rollover Cable** (Cisco) - connect workstation to router or switch console port
+- 4.5 Fiber-Optic Cabling
+    - Transmit data further distances and at higher bandwidth; les attenuation and immune to EMI/RFI
+    - Types:
+        - **Single-mode fiber (SMF)**: small core, laser, long distance
+        - **Multimode fiber (MMF)**: larger core, LED, different angles; bandwidth up to 10 Gbps, lengths ≤ 550m
+    - Uses: enterprise networks, fiber-to-the-home (FTTH), Long-Haul, Submarine Cable Networks
+    - Connectors - vary by dimensions and methods of coupling:
+        - Straight-Tip (ST): one of the first, twist bayonet mechanism
+        - Subscriber Connector (SC): square/standard, LAN/WAN
+        - Lucent Connector (LC) Simplex: little/local
+        - Duplex Multimode LC Connectors: like LC, but double
+        - Some cables accept both TX  and RX; some use different wavelengths
+    - Fiber Patch Cords: Yellow (Single-Mode), Orange/Aqua (Multimode)
+    - Fiber v Copper: Fiber used for backbone cabling for high-traffic, point-to-point connections; interconnection of buildings
+- 4.6 Wireless Media
+    - Limitations: coverage area, interference, security, shared medium (reduced bandwidth)
+        - Wireless LANs operate in half-duplex, so the number of devices/users has an impact on performance
+    - Standards: data-to-radio signal encoding, frequency/power of transmission, signal reception and decoding requirements, antenna design and construction
+        - **Wi-Fi (IEEE 802.11)** - WLAN uses a contention-based protocol known as carrier sense multiple access/collision avoidance (CSMA/CA). NIC must listen before transmitting to determine if the channel is clear.
+        - **Bluetooth (IEEE 802.15)** - Wireless Personal Area Network (WPAN) standard, device pairing communication up to 100m
+        - **WiMAX (802.16)** - Worldwide interoperability for Microware Access; point-to-multipoint topology for wireless broadband access
+        - **Zigbee (IEEE 802.15.4)** - low-data rate, low-power comms; typically used for industrial or IoT environments (light switches and medical devices)
+    - Wireless LAN - Network Devices:
+        - Wireless Access Point (AP): concentrate wireless signals from users and connect to copper-based infrastructure
+        - Wireless NIC adapters: provide wireless comms to hosts
