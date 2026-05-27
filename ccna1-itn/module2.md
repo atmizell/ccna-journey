@@ -169,6 +169,3 @@
     - Test the Interface Assignment
     - Test end-to-end connectivity (ping)
         - Always a good idea to test connectivity in both directions
-- 2.9 Module Practice and Quiz
-    - Basic Switch and End Device Configuration (Logical/Physical)
-    - Module Review
