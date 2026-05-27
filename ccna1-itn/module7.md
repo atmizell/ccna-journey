@@ -1,6 +1,8 @@
 # Module 7: Ethernet Switching
 
-**Relevant JITL Video**: Day 9 - Switch Interfaces
+**Relevant JITL Video**: 
+- Days 5/6 - Ethernet LAN Switching
+- Day 9 - Switch Interfaces
 
 - 7.1 Ethernet Frames
     - Ethernet Encapsulation
