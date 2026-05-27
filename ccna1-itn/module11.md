@@ -1,9 +1,11 @@
 # Module 11: IPv4 Addressing
 
 **Relevant JITL Videos**: 
-- Days 7/8 - IPv4 Addressing
-- Days 13/14/15 - Subnetting
-- Day 24 - Dynamic Routing
+> Days 7/8 - IPv4 Addressing
+> 
+> Days 13/14/15 - Subnetting
+> 
+> Day 24 - Dynamic Routing
 
 - 11.1 IPv4 Address Structure
     - IP addresses = 32 bits, 4x octets; Network + Host Portions
