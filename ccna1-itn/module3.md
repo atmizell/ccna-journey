@@ -1,0 +1,177 @@
+# Module 3: Protocols and Models
+
+**Relevant JITL Videos**: Day 3 - TCP/IP Model
+
+- 3.0 Introduction
+    - Protocol - set of agreed upon rules that have been created by standards organizations
+    - Models - visualize rules and their place in your network
+- 3.1 The Rules
+    - Communication Fundamentals - **Three Elements**:
+        - **Message Source (Sender)** - sources are people or devices that need to send messages to others
+        - **Message Destination (Receiver)** - Receives the message and interprets it
+        - **Channel** - Consists of the media that provides the message pathway
+    - Communication Protocols: Protocols are governing rules specific to the type of communication method being used
+    - Rule Establishment: protocols must account for the following requirements to successfully deliver a message that is understood by the receiver:
+        - identified sender and receiver
+        - common language and grammar
+        - speed and timing of delivery
+        - confirmation or acknowledgment requirements
+    - Network Protocol Requirements
+        - Computer and network protocols identify the source/destination and define the details of how a message is transmitted across a network
+        - Common Protocols - Message: encoding, formatting and encapsulation, size, timing, delivery options
+            - Message Encoding - the process of converting information into another acceptable form for transmission
+            - Message Formatting and Encapsulation: message formats depend on the type of message and the channel used
+                - Formatting - concerned with properly identifying address of sender and receiver
+                - Encapsulation - “wrapping” a message within another
+            - Message Size: it is necessary to segment messages for transmission, meeting min/max requirements
+            - Message Timing:
+                - **Flow Control** - managing rate of data transmission; defines how much info can be sent and the speed of delivery (i.e. Window Size and Sliding Window)
+                - **Response Timeout** - hosts specify how long to wait for responses and action to take if response timeout occurs
+                - **Access Method** - when someone can send a message (avoid collisions, i.e. WLAN NIC determines whether wireless medium available)
+    - Message Delivery Options:
+        - **Unicast** - transmit to single end device
+        - **Multicast** - transmit to one or more end device
+        - **Broadcast** - transmitted to all end devices
+        - Note: Node Icons (often circles) can be used for network documents and topologies
+- 3.2 Protocols
+    - Overview
+        - Network protocols define the common format and set of rules for exchanging messages b/w devices. Implemented by end and intermediary devices
+        - Types:
+            - **Network Communication**: enable devices to communicate; ethernet family involves **IP**, **Transmission Control Protocol (TCP)**, **HyperText Transfer Protocol (HTTP)**, etc.
+            - **Network Security**: secure data to provide data authentication, integrity, and encryption; examples: **Secure Shell (SSH)**, **Secure Sockets Later (SSL)**, and **Transport Layer Security (TLS)**
+            - **Routing**: enable routers to exchange route information, compare path information, then select best paths; examples: **Open Shortest Path First (OSPF)** and **Border Gateway Protocol (BGP)**
+            - **Service Discovery**: used for automatic detection of devices or services; example: **Dynamic Host Configuration Protocol (DHCP** - IP Address Allocation) and **Domain Name System (DNS** - Name-to-IP address translation)
+    - Network Protocol Functions
+        - **Addressing**: identify the sender and intended receiver of the message using a defined address scheme (Ethernet, IPv4, IPv6)
+        - **Reliability**: Provides guaranteed delivery mechanisms in case messages are lost or corrupted in transit (TCP)
+        - **Flow Control**: Ensures that data flows at an efficient rate (TCP)
+        - **Sequencing**: Uniquely labels each transmitted segment of data, used to ensure correct reassembly (TCP)
+        - **Error Detection**: Determine if data became corrupt in transmission (Ethernet, IPv4, IPv6, TCP)
+        - **Application Interface**: Info used for process-to-process communications b/w network applications (Layer 5 - HTTP or HTTPS)
+    - Protocol Interaction
+        - **Hypertext Transfer Protocol (HTTP)** - governs web server / web client interaction. Defines the content and formatting of the requests and responses exchanged b/w a client and server. Implemented as part of the application.
+        - **Transmission Control Protocol (TCP)** - manages individual conversations, responsible for guaranteeing the reliable delivery of information and managing flow control between end devices.
+        - **Internet Protocol (IP)** - responsible for delivering messages, IP is used by routers to forward the messages across multiple networks.
+        - **Ethernet** - responsible for the delivery of messages from one NIC to another NIC on the same Ethernet LAN.
+- **3.3 Protocol Suites**
+    - Network Protocol Suites - A group of inter-related protocols necessary to perform a communication function (stack); low level concerned with moving data over network or providing services to upper layers
+    - Evolution of Protocol Suites:
+        - IP Suite or **TCP/IP** - most common, open standard protocol suite maintained by the **Internet Engineering Task Force (IETF)**
+        - **Open Systems Interconnection (OSI)** Protocols - developed in 1977 by the **International Organization for Standardization (ISO)** and the **International Telecommunications Union (ITU)**. Includes the 7 layer OSI reference model, categorizing the functions of its protocols.
+        - Apple Talk - short lived model from 1985-1995 (Apple adopted TCP/IP)
+        - Novell NetWare - short lived, developed by Novell Inc. (1983-1995)
+    - TCP/IP Protocol Example
+        - TCP/IP Protocols are available in the Application (5), Transport (4), and Internet (3) layers. Most common Network Access Layer (2) LAN protocols are Ethernet and Wireless LAN (WLAN) - responsible for delivering the IP packet over the physical medium.
+        - ex. Web Browser - Web Server: utilize the HTTP, TCP, IP ; ethernet protocols
+    - **TCP/IP Protocol Suite**:
+        - **Open Standard Protocol Suite**: freely available to the public, can be used by any vendor in hard/software
+        - **Standards-Based Protocol Suite**: endorsed by the networking industry and approved by a standards organization. Ensures interoperability b/w manufacturers.
+        - **Protocols at Each Layer**:
+            - Application (Layer 5)
+                - Name System - **Domain Name System (DNS)** - translates domain names into IP Addresses
+                - Host Config
+                    - **DHCPv4** - dynamically assigns IPv4 addressing information to DHCPv4 clients at startup
+                    - **DHCPv6** - “” DHCPv6 clients
+                    - **Stateless Address Autoconfiguration (SLAAC)** - allows a device to obtain its IPv6 addressing information without using a DHCPv6 server
+                - Email
+                    - **File Transfer Protocol (FTP)** - sets rules enabling file access and network transfer; reliable, connection-oriented, acknowledged file delivery protocol
+                    - **SSH File Transfer Protocol (SFTP)** - Extension to Secure Shell (SSH) protocol, used to establish secure file transfer session with encryption.
+                    - **Trivial File Transfer Protocol (TFTP)** - simple, connectionless, best-effort, unacknowledged file delivery (less overhead than FTP)
+                - Web and Web Service
+                    - **Hypertext Transfer Protocol (HTTP)** - set of rules for exchanging text/media on the WWW
+                    - **HTTP Secure (HTTPS)** - encrypts data exchanged
+                    - **Representational State Transfer (REST)** - web service that uses **application programming interfaces (APIs)** and HTTP to create web applications
+            - Transport (Layer 4)
+                - Enable communication between processes running on separate hosts
+                - **Transmission Control Protocol (TCP)**: Connection-Oriented; provides reliable, acknowledged transmissions that confirm successful delivery
+                - **User Datagram Protocol (UDP)**: Connectionless; does not confirm successful datagram transmission
+            - Internet (Layer 3)
+                - Internet Protocol
+                    - **IPv4** - 32-bit address; receives message segments from the transport layer, packages messages into packets, and addresses packets for end-to-end delivery over a network.
+                    - **IPv6** - 128-bit address
+                    - **Network Address Translation (NAT)** - translates IPv4 addresses from a private network into globally unique public IPv4 addresses
+                - Messaging
+                    - **Internet Control Message Protocol v4 (ICMPv4)** - provides feedback from a destination host to a source host about errors in IPv4 packet delivery
+                    - **ICMPv6** - “” for IPv6 packets
+                    - **Neighbor Discovery (ICMPv6 ND)** - includes four protocol messages that are used for address resolution and duplicate address detection in IPv6
+                - Routing Protocols
+                    - **Open Shortest Path First (OSPF)** - Link-state routing protocol that uses a hierarchal design based on areas. Open standard interior routing protocol
+                    - **Enhanced Interior Gateway Routing Protocol (EIGRP)** - Cisco open standard routing protocol, uses composite metric based on bandwidth, delay, load, and reliability
+                    - **Border Gateway Protocol (BGP)** - an open standard exterior gateway routing protocol used between Internet Service Providers (ISPs)
+            - Network Access (Layer 2)
+                - Address Resolution Protocol (ARP)
+                    - Provides dynamic address mapping between an IPv4 address and hardware address
+                    - Operates at the Network Access Layer (2) because its primary purpose is to discover the MAC address (layer 2) of the destination.
+                - Data Link Protocols
+                    - Ethernet - defines rules for wiring and signaling standards of the network access layer
+                    - WLAN - defines the rules for wireless signaling across the 2.4 GHz and 5 GHz radio frequencies
+    - TCP/IP Communication Process
+- 3.4 Standards Organizations
+    - Open Standards
+        - Encourage interoperability, competition, innovation; prevent monopolization or unfair advantage; generally vendor neutral
+        - Standards Organizations: IEEE, IANA, IETF, ICANN, ITU, TIA
+    - Internet Standards - Organizations:
+        - Internet Society (ISOC): promote the open development and evolution of internet use worldwide
+        - Internet Architecture Board (IAB): manage and develop internet standards
+        - **Internet Engineering Task Force (IETF)**: develop, update, maintain internet and TCP/IP technologies; includes processes and documents for developing new protocols and updating existing protocols (**Request for Comment - RFC**)
+        - Internet Research Task Force (IRTF): long-term research related to internet and TCP/IP protocols (anti-spam research group, crypto forum research group, peer-to-peer research group)
+        - TCP/IP Groups:
+            - **Internet Corporation for Assigned Names and Numbers (ICANN)**: coordinates IP address allocation, domain name management, TCP/IP protocol information management
+            - **Internet Assigned Numbers Authority (IANA)**: oversee and manage IP address allocation, domain name management, and protocol identifiers for ICANN
+    - Electronic and Communication Standards
+        - **Institute of Electrical and Electronics Engineers (IEEE)**: advance technology, create power and energy industry standards (802.3 Ethernet, 802.11 WLAN)
+        - Electronic Industries Alliance (EIA): electrical wiring standards, connectors, 19-inch racks for networking
+        - Telecommunications Industry Authority (TIA): comm standards for radio equipment, cell towers, Voice over IP (VoIP), satellites, etc.
+        - International Telecommunications Union - Telecommunication Standardization Sector (ITU-T): defines standards for video compression, IP Television (IPTV), and broadband communications, such as Digital Subscriber Line (DSL)
+- 3.5 Reference Models
+    - Benefits of Using the Layered Model
+        - Layered model benefits: assist in protocol design, foster competition, prevent tech changes from affecting other layers, provide common language
+        - Models: **Open Systems Interconnection (OSI)** and **TCP/IP**
+    - **OSI Reference Model** (Numbered Layer Model)
+        - (7) **Application** - contains protocols for process-to-process communication
+        - (6) **Presentation** - provides for common representation of data transferred between application layer services
+        - (5) **Session** - provides services to presentation layer to organize its dialogue and to manage data exchange
+        - (4) **Transport** - defines services to segment, transfer, and reassemble the data for individual communications between the end devices
+        - (3) **Network** - provides services to exchange the individual pieces of data over the network between identified end devices
+        - (2) **Data Link** - describe methods for exchanging data frames between devices over a common media
+        - (1) **Physical** - describe the mechanical, electrical, functional, and procedural means to activate, maintain, and de-activate physical connections for a bit transmission to and from a network device
+    - **TCP/IP Protocol Model** (Internet Model)
+        - (4) **Application** - represents data to the user, plus encoding and dialog control
+        - (3) **Transport** - Supports communication between various devices across diverse networks
+        - (2) **Internet** - determines the best path through the network
+        - (1) **Network Access** - controls the hardware devices and media that make up the network
+    - Model Comparison
+        - Key similarities are in the transport and network layers; however, the two models differ in how they relate to the layers above and below each layer
+        - OSI Layer 3 (Network) maps directly to the TCP/IP Internet Layer - used to describe protocols that address and route messages through an internetwork
+        - OSI Layer 4 (Transport) maps directly to the TCP/IP Transport Layer - describes services and functions that provide ordered and reliable delivery of data b/w source and destination
+        - TCP/IP Application Layer includes OSI layers 5/6/7
+        - Both models commonly used when referring to layer protocols; OSI often used for lower layers due to 1/2 separation
+- 3.6 Data Encapsulation
+    - Segmenting Messages
+        - divide stream of data into smaller units for transmission; increase speed and efficiency
+        - multiplexing - interleaved network conversations
+    - Sequencing (TCP) - ensures segmented messages can be assembled in the proper order by the receiver
+    - Protocol Data Units (PDU) - form that a piece of data takes at any layer
+        - Transport Layer:
+            - datagram = UDP PDU
+            - segment = TCP PDU
+        - encapsulation - each layer encapsulates the PDU from the preceding layer: Data (5) → Segment (4) → Packet (3) → Frame (2) → Bits (1)
+- 3.7 Data Access
+    - Addresses - Source and Destination Addresses
+        - Application: encoded application data
+        - Transport: process number (ports)
+        - Network Layer:  logical network addresses; deliver IP packet (same/remote network); 32 or 128-bits in length
+        - Data Link Layer: physical addresses (MAC); deliver data link frame NIC - NIC (same network); 12 hexadecimal digits
+        - Physical: Timing and Synchronization Bits
+    - Layer 3 Logical Address
+        - IP Packet - source and destination IP address
+        - IP Address:
+            - Network Portion (IPv4) or Prefix (IPv6): *left most part*, indicates address member network (same network = same network portion)
+            - Host portion (IPv4) or Interface ID (IPv6): *right most part*, ID specific device on the network, unique for each device/interface
+            - *Note*: The subnet mask (IPv4) or prefix-length (IPv6) is used to ID the network portion of an IP address from the host portion
+    - Role of the Data Link Layer Addresses (Same IP Network): Same network: data link frame sent directly to the receiving device; Ethernet Network = Ethernet MAC Address (hexadecimal notation)
+    - Role of Network Layer Addresses: different network - IP addresses represent hosts on different networks
+    - Data Link Addresses (hops):
+        - Hops: host-router, router-router, router-server; each hop encapsulates the IP Packet in a new data link frame
+        - Data Link Frame: source/destination NIC addresses
+
