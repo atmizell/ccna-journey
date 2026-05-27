@@ -1,8 +1,11 @@
 # Module 12: IPv6 Addressing
 
 **Relevant JITL Videos**: 
-- Days 13/14/15 - Subnetting
-- Days 31/32/33 - IPv6
+> Days 13/14/15 - Subnetting
+> 
+> Day 24 - Dynamic Routing
+> 
+> Days 31/32/33 - IPv6
 
 - **Terms**:
     - **SLAAC** = Stateless Address Autoconfiguration
