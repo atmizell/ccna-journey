@@ -5,7 +5,7 @@ Does not include any section, module, checkpoint, practice, or final test answer
 
 All structure, notation, and emphasis placed throughout the notes is based entirely on my interpretations of the information presented.
 
-**Citation**: Cisco Systems, Inc. (2026). CCNA: Switching, Routing, and Wireless Essentials [Online Course]. NetAcad. [https://www.netacad.com/courses/ccna-switching-routing-wireless-essentials]([https://www.netacad.com/courses/ccna-switching-routing-wireless-essentials).
+**Citation**: Cisco Systems, Inc. (2026). CCNA: Switching, Routing, and Wireless Essentials [Online Course]. NetAcad. [https://www.netacad.com/courses/ccna-switching-routing-wireless-essentials](https://www.netacad.com/courses/ccna-switching-routing-wireless-essentials).
 
 ## **Course Modules**
 
