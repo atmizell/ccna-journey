@@ -30,6 +30,6 @@ I primarily completed the following Cisco Networking Academy (NetAcad) courses:
 ## 📓 Consolidated Notes
 My collection of notes supporting my CCNA preparation across all study mediums (Updated Periodically).
 
-### [CCNA 1 - Introduction to Networking (ITN)](https://www.github.com/atmizell/ccna-journey/ccna1-itn)
-### [CCNA 2 - Switching, Routing, Wireless Essentials (SWRE)](https://www.github.com/atmizell/ccna-journey/ccna2-swre)
+### [CCNA 1 - Introduction to Networking (ITN)](https://www.github.com/atmizell/ccna-journey/tree/main/ccna1-itn)
+### [CCNA 2 - Switching, Routing, Wireless Essentials (SWRE)](https://www.github.com/atmizell/ccna-journey/tree/main/ccna2-swre)
 ### CCNA 3 - Enterprise Networking, Security, and Automation (ENSA)
