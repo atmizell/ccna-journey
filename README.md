@@ -6,9 +6,9 @@
 ### Cisco NetAcad
 I primarily completed the following Cisco Networking Academy (NetAcad) courses:
 
-[**CCNA 1 - Introduction to Networking (ITN)**](https://www.netacad.com/courses/ccna-introduction-networks?courseLang=en-US&instance_id=5d87805b-88d2-477d-9112-7ed9ccceba84)
+[**CCNA 1 - Introduction to Networking (ITN)**](https://www.netacad.com/courses/ccna-introduction-networks)
 
-**CCNA 2 - Switching, Routing, and Wireless Essentials (SRWE)**
+[**CCNA 2 - Switching, Routing, and Wireless Essentials (SWRE)**](https://www.netacad.com/courses/ccna-switching-routing-wireless-essentials)
 
 **CCNA 3 - Enterprise Networking, Security, and Automation (ENSA)**
 
@@ -21,13 +21,15 @@ I primarily completed the following Cisco Networking Academy (NetAcad) courses:
 ## 📆 Preparation Timeline
 | Dates | Material | Progress |
 | ----- | -------- | -------- |
-| 28APR - 12MAY | Pre-Reading, JITL Videos | N/A |
-| 13MAY - 27MAY | CCNA 1 - ITN Course | 🔄 In Progress |
-| 28MAY - ? | CCNA 2 - SRWE Course | 🗒️ Planned |
-| ? - 26JUN | CCNA 3 - ENSA Course | 🗒️ Planned |
+| 28APR - 12MAY | Pre-Reading, JITL Videos | ✔️ Complete |
+| 13MAY - 27MAY | CCNA 1 - ITN Course | ✔️ Complete |
+| 28MAY - 8JUN | CCNA 2 - SRWE Course | 🔄 In Progress |
+| 8JUN - 18JUN | CCNA 3 - ENSA Course | 🗒️ Planned |
 
 
 ## 📓 Consolidated Notes
 My collection of notes supporting my CCNA preparation across all study mediums (Updated Periodically).
 
-### CCNA 1 - Introduction to Networking (ITN)
+### [CCNA 1 - Introduction to Networking (ITN)](https://www.github.com/atmizell/ccna-journey/ccna1-itn)
+### [CCNA 2 - Switching, Routing, Wireless Essentials (SWRE)](https://www.github.com/atmizell/ccna-journey/ccna2-swre)
+### CCNA 3 - Enterprise Networking, Security, and Automation (ENSA)
